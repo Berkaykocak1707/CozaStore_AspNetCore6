@@ -1,0 +1,41 @@
+﻿@model StockForUpdateDto // Modelinizi StockForUpdateDto veya uygun bir DTO ile değiştirin
+@{
+    ViewBag.Title = "Edit Stock";
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-sm-12 col-xl-6">
+            <div class="bg-secondary rounded h-100 p-4">
+                <h6 class="mb-4">Edit Stock</h6>
+                <form asp-action="Edit" method="post">
+                    <input type="hidden" asp-for="StockId" />
+                    <input type="hidden" asp-for="ProductId" />
+                    <div class="mb-3">
+                        <label class="form-label">@Model.Product.Name</label>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Size" class="form-label">Size</label>
+                        <input asp-for="Size" class="form-control" type="text" />
+                        <span asp-validation-for="Size" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Color" class="form-label">Color</label>
+                        <input asp-for="Color" class="form-control" type="text" />
+                        <span asp-validation-for="Color" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Quantity" class="form-label">Quantity</label>
+                        <input asp-for="Quantity" class="form-control" type="number" />
+                        <span asp-validation-for="Quantity" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

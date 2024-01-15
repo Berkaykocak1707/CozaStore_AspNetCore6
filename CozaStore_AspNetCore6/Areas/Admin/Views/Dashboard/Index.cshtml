@@ -1,0 +1,136 @@
+﻿@model DashboardModel
+@{
+    ViewBag.Title = "Dashboard";
+    decimal TotalSale = 0;
+    decimal TotalSaleQuantity = 0;
+    @foreach (var item in Model.Orders)
+    {
+        TotalSale += item.SubTotal;
+    }
+    @foreach (var item in Model.Orders)
+    {
+        TotalSaleQuantity += item.SubTotalQuantity;
+    }
+    int counter = 0;
+}
+<!-- Sale & Revenue Start -->
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-chart-line fa-3x text-primary"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Total Sale</p>
+                    <h6 class="mb-0">$@TotalSale</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-chart-bar fa-3x text-primary"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Total Sale Quantity</p>
+                    <h6 class="mb-0">@TotalSaleQuantity</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-chart-area fa-3x text-primary"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Products</p>
+                    <h6 class="mb-0">@Model.Products.Count()</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-chart-pie fa-3x text-primary"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Users</p>
+                    <h6 class="mb-0">@Model.Users.Count()</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Recent Sales Start -->
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary text-center rounded p-4">
+        <h6 class="mb-0">Messages</h6>
+        <a asp-area="Admin" asp-controller="Contact" asp-action="Index">Show All</a>
+        @foreach (var item in Model.Contacts)
+        {
+            if (counter < 5)
+            {
+                <div class="d-flex align-items-center border-bottom py-3">
+                    <div class="w-100 ms-3">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-0">@item.EmailAddress</h6>
+                        </div>
+                        <span>@item.Message</span>
+                    </div>
+                </div>
+
+                counter++;
+            }
+            else
+            {
+                break;
+            }
+        }
+        <br />
+        <br />
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Recent Salse</h6>
+            <a asp-controller="Order" asp-action="Index">Show All</a>
+        </div>
+        <div class="table-responsive">
+            @if (Model?.Orders?.Count() > 0)
+            {
+                
+            
+                <table class="table text-start align-middle table-bordered table-hover mb-0">
+                    <thead>
+                        <tr class="text-white">
+                            <th scope="col">Date</th>
+                            <th scope="col">Order ID</th>
+                            <th scope="col">Customer</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Orders)
+                        {
+                            <tr>
+                                <td>@item.OrderedAt</td>
+                                <td>@item.OrderId</td>
+                                <td>@item.Name</td>
+                                <td>
+                                    @item.SubTotal
+                                </td>
+                                <td>@(item.Shipped ? "Completed" : "In Progress")</td>
+                                <td>
+                                    <a asp-area="Admin" asp-action="Complete" asp-controller="Order" asp-route-id="@item.OrderId" class="btn btn-sm btn-primary">Complete</a>
+                                </td>
+                            </tr>
+                        }
+                    
+                    </tbody>
+                </table>
+        
+            }
+            else
+            {
+            <div class="row vh-100 bg-secondary rounded align-items-center justify-content-center mx-0">
+                <div class="col-md-6 text-center">
+                    <h3>There is no order yet.</h3>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</div>
+<!-- Recent Sales End -->

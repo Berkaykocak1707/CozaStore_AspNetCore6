@@ -1,0 +1,39 @@
+@model IEnumerable<IdentityRole>
+
+@section Style{
+    <style>
+    /* Stil eklemeleri */
+    .page-title {
+        background-color: black;
+        color: white;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .role-list {
+        background-color: black;
+        color: white;
+    }
+
+    .role-item {
+        background-color: black;
+        border: 2px solid red;
+        color: white;
+        font-weight: bold; /* Çerçevenin biraz daha kalýn olmasý için font kalýnlýðýný artýrýyoruz */
+    }
+</style>
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="page-title">
+        <h1 class="display-6">Roles</h1>
+    </div>
+
+    <ul class="list-group role-list my-5">
+        @foreach (var role in Model)
+        {
+            <li class="list-group-item role-item">@role.Name</li>
+        }
+    </ul>
+</div>
+

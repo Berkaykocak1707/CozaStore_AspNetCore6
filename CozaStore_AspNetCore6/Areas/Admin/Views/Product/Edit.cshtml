@@ -1,0 +1,148 @@
+﻿@model ProductForUpdateDto // Modelinizi ProductForUpdateDto veya uygun bir DTO ile değiştirin
+@{
+    ViewBag.Title = "Edit Product";
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-sm-12 col-xl-6">
+            <div class="bg-secondary rounded h-100 p-4">
+                <h6 class="mb-4">Edit Product</h6>
+                <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" name="Photo1Url" value="@Model.Photo1Url" />
+                    <input type="hidden" name="Photo2Url" value="@Model.Photo2Url" />
+                    <input type="hidden" name="Photo3Url" value="@Model.Photo3Url" />
+
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label">Name</label>
+                        <input asp-for="Name" class="form-control" type="text" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="SKU" class="form-label">SKU</label>
+                        <input asp-for="SKU" class="form-control" type="text" />
+                        <span asp-validation-for="SKU" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label">Description</label>
+                        <textarea asp-for="Description" class="form-control"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="CategoryId" class="form-label">Category ID</label>
+                        <select asp-for="CategoryId" class="form-control" asp-items="@ViewBag.Category">
+                            <option value="">-- Select Category --</option>
+                        </select>
+                        <span asp-validation-for="CategoryId" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Price" class="form-label">Price</label>
+                        <input asp-for="Price" class="form-control" type="number" step="0.01" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Weight" class="form-label">Weight (Optional)</label>
+                        <input asp-for="Weight" class="form-control" type="number" step="0.01" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Dimensions" class="form-label">Dimensions (Optional)</label>
+                        <input asp-for="Dimensions" class="form-control" type="text" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Materials" class="form-label">Materials (Optional)</label>
+                        <input asp-for="Materials" class="form-control" type="text" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Color" class="form-label">Color (Optional)</label>
+                        <input asp-for="Color" class="form-control" type="text" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Photo1Url" class="form-label">Photo 1 URL</label>
+                        <input class="form-control form-control-sm bg-dark" name="photo" type="file">
+                        <div class="mt-2 d-flex align-items-center">
+                            <img src="@Model.Photo1Url" alt="Photo 2" style="width: 50px; height: 50px; object-fit: cover;">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Photo2Url" class="form-label">Photo 2 URL (Optional)</label>
+                        <input class="form-control form-control-sm bg-dark" name="photo2" type="file">
+                        @if (!string.IsNullOrEmpty(Model.Photo2Url))
+                        {
+                            <div class="mt-2 d-flex align-items-center">
+                                <img src="@Model.Photo2Url" alt="Photo 2" style="width: 50px; height: 50px; object-fit: cover;">
+                                <div class="form-check ms-3">
+                                    <input class="form-check-input" type="checkbox" name="deletePhoto2" value="true">
+                                    <label class="form-check-label" for="deletePhoto2">Delete?</label>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Photo3Url" class="form-label">Photo 3 URL (Optional)</label>
+                        <input class="form-control form-control-sm bg-dark" name="photo3" type="file">
+                        @if (!string.IsNullOrEmpty(Model.Photo3Url))
+                        {
+                            <div class="mt-2 d-flex align-items-center">
+                                <img src="@Model.Photo3Url" alt="Photo 3" style="width: 50px; height: 50px; object-fit: cover;">
+                                <div class="form-check ms-3">
+                                    <input class="form-check-input" type="checkbox" name="deletePhoto3" value="true">
+                                    <label class="form-check-label" for="deletePhoto3">Delete?</label>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+
+                    <h6 class="mb-4">Stock</h6>
+                    <div>
+                        <a asp-area="Admin" asp-controller="Stock" asp-action="Index" asp-route-productId="@Model.Id">Go to stock page!</a>
+                    </div>
+                    <div id="stockContainer">
+                        <!-- Stock -->
+                    </div>
+                    <button type="button" id="addStockButton" class="btn btn-success m-2">Add Stock</button>
+                    <br />
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        document.getElementById('addStockButton').addEventListener('click', function () {
+            var container = document.getElementById('stockContainer');
+            var index = container.children.length;
+
+            var newDiv = document.createElement('div');
+            newDiv.innerHTML = `
+                        <div class="mb-3">
+                            <label class="form-label">Size</label>
+                            <input type="text" class="form-control" name="Stocks[${index}].Size">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Color</label>
+                            <input type="text" class="form-control" name="Stocks[${index}].Color">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Quantity</label>
+                            <input type="number" class="form-control" name="Stocks[${index}].Quantity">
+                        </div>
+                    `;
+            container.appendChild(newDiv);
+        });
+
+    </script>
+}

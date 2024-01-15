@@ -1,0 +1,55 @@
+@model IEnumerable<IdentityUser>
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h1 class="display-4">Users</h1>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <!-- Önceki "col-md-8" yerine "col-md-10" kullanýyoruz -->
+            <div class="d-flex justify-content-end mb-3">
+                <a asp-action="Create" class="btn btn-success">
+                    <i class="fa fa-plus"></i> Add User
+                </a>
+            </div>
+            <div class="table-responsive">
+                <!-- Tablo için bir sarmaç kullanýyoruz -->
+                <table class="table table-striped">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>UserName</th>
+                            <th>Roles</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (IdentityUser user in Model)
+                        {
+                            <tr>
+                                <td>@user.Id</td>
+                                <td>@user.UserName</td>
+                                <td user-name="@user.UserName" user-role=""></td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a class="btn btn-warning" asp-action="Update" asp-route-id="@user.UserName">
+                                            <i class="fa fa-edit"></i> Edit
+                                        </a>
+                                        <a class="btn btn-info" asp-action="ResetPassword" asp-route-id="@user.UserName">
+                                            <i class="fa fa-edit"></i> Reset Password
+                                        </a>
+                                        <form method="post" asp-action="DeleteOneUser">
+                                            <input type="hidden" name="UserName" value="@user.UserName" />
+                                            <button type="submit" class="btn btn-danger">
+                                                <i class="fa fa-trash"></i> Delete
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

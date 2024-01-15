@@ -1,0 +1,65 @@
+﻿@model OrderListViewModel
+@{
+    ViewBag.Title = "Order";
+}
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Orders</h6>
+        </div>
+        <div class="table-responsive">
+            @if (Model?.Orders?.Count() > 0)
+            {
+
+
+                <table class="table text-start align-middle table-bordered table-hover mb-0">
+                    <thead>
+                        <tr class="text-white">
+                            <th scope="col">Date</th>
+                            <th scope="col">Order ID</th>
+                            <th scope="col">Customer</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Orders)
+                        {
+                            <tr>
+                                <td>@item.OrderedAt</td>
+                                <td>@item.OrderId</td>
+                                <td>@item.Name</td>
+                                <td>
+                                    @item.SubTotal
+                                </td>
+                                <td>@(item.Shipped ? "Completed" : "In Progress")</td>
+                                <td>
+                                     <a asp-area="Admin" asp-action="Complete" asp-controller="Order" asp-route-id="@item.OrderId" class="btn btn-sm btn-primary">Complete</a>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+
+            }
+            else
+            {
+                <div class="row vh-100 bg-secondary rounded align-items-center justify-content-center mx-0">
+                    <div class="col-md-6 text-center">
+                        <h3>There is no order yet.</h3>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="pagination-wrapper text-center">
+        <div class="pagination">
+            <div page-model="@Model?.Pagination" page-action="Index" page-classes-enabled="true" page-class="btn"
+                 page-class-normal="btn-outline-primary" page-class-selected="btn-secondary" class="btn-group">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Pagination -->

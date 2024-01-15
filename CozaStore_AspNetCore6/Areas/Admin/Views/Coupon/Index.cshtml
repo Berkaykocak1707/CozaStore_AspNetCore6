@@ -1,0 +1,49 @@
+﻿@model IEnumerable<CouponDto>
+@{
+    ViewBag.Title = "Coupons";
+}
+
+<div class="bg-secondary rounded h-100 p-4">
+    <h6 class="mb-4">Coupons</h6>
+    <div class="table-responsive">
+        @if (Model.Any())
+        {
+            <div class="mb-3">
+                <a class="btn btn-sm btn-primary" asp-action="Create">Create a Coupon</a>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Coupon Code</th>
+                        <th scope="col">Stock</th>
+                        <th scope="col">Discount Percentage</th>
+                        <th scope="col">End Date</th>
+                        <th scope="col">IsActive</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var coupon in Model)
+                    {
+                        <tr>
+                            <td>@coupon.CouponCode</td>
+                            <td>@coupon.CouponStock</td>
+                            <td>@coupon.CouponDiscountPercentage</td>
+                            <td>@coupon.EndDate.ToShortDateString()</td>
+                            <td>@(coupon.IsActive ? "Yes" : "No")</td>
+                            <td>
+                                <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@coupon.CouponId">Edit</a>
+                                <a class="btn btn-sm btn-primary" asp-action="Delete" asp-route-id="@coupon.CouponId">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>There are no coupons to display.</p>
+            <a class="btn btn-sm btn-primary" asp-action="Create">Create a Coupon</a>
+        }
+    </div>
+</div>

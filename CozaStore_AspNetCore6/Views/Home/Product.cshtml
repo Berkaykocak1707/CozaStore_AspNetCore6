@@ -1,0 +1,21 @@
+﻿@model HomePageViewModel
+@{
+	ViewData["Title"] = "Products";
+}
+<!-- Product -->
+@Html.Partial("Shared/_Product", Model)
+
+@section Scripts{
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			var searchButton = document.getElementById("searchButton");
+			var searchInput = document.getElementById("searchInput");
+
+			searchButton.addEventListener("click", function () {
+				var searchText = searchInput.value;
+				var redirectToUrl = "?SearchTerm=" + encodeURIComponent(searchText);
+				window.location.href = redirectToUrl;
+			});
+		});
+	</script>
+}

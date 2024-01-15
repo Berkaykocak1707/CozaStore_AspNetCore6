@@ -1,0 +1,45 @@
+﻿@model IEnumerable<ContactDto>
+@{
+    ViewBag.Title = "Contacts";
+}
+
+<div class="bg-secondary rounded h-100 p-4">
+    <h6 class="mb-4">Contacts</h6>
+    <div class="table-responsive">
+        @if (Model.Any())
+        {
+            <div class="mb-3">
+                <a class="btn btn-sm btn-primary" asp-action="Create">Create a Contact</a>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Contact ID</th>
+                        <th scope="col">Email Address</th>
+                        <th scope="col">Message</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var contact in Model)
+                    {
+                        <tr>
+                            <td>@contact.ContactId</td>
+                            <td>@contact.EmailAddress</td>
+                            <td>@contact.Message</td>
+                            <td>
+                                <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@contact.ContactId">Edit</a>
+                                <a class="btn btn-sm btn-primary" asp-action="Delete" asp-route-id="@contact.ContactId">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>There are no contacts to display.</p>
+            <a class="btn btn-sm btn-primary" asp-action="Create">Create a Contact</a>
+        }
+    </div>
+</div>

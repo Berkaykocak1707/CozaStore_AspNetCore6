@@ -1,0 +1,38 @@
+﻿@model AboutForUpdateDto
+@{
+    ViewBag.Title = "Edit About";
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-sm-12 col-xl-6">
+            <div class="bg-secondary rounded h-100 p-4">
+                <h6 class="mb-4">Edit About Entry</h6>
+                <form asp-action="Edit" method="post">
+                    <input type="hidden" asp-for="AboutId" /> <!-- Assuming there's an AboutId field -->
+                    <div class="mb-3">
+                        <label asp-for="OurStory" class="form-label"></label>
+                        <textarea id="TextAreaOurStory" asp-for="OurStory" class="form-control"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="OurMission" class="form-label"></label>
+                        <textarea id="TextAreaOurMission" asp-for="OurMission" class="form-control"></textarea>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input asp-for="IsActive" class="form-check-input" />
+                        <label asp-for="IsActive" class="form-check-label"></label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+    {
+    <script>
+        var simplemde1 = new SimpleMDE({ element: document.getElementById("TextAreaOurStory") });
+        var simplemde2 = new SimpleMDE({ element: document.getElementById("TextAreaOurMission") });
+    </script>
+}

@@ -1,0 +1,36 @@
+﻿@model IEnumerable<AboutDto>
+@{
+    ViewBag.Title = "About";
+}
+
+<div class="bg-secondary rounded h-100 p-4">
+    <h6 class="mb-4">About Entries</h6>
+    <div class="table-responsive">
+        @if (Model.Any())
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Our Story</th>
+                        <th scope="col">Our Mission</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var about in Model)
+                    {
+                        <tr>
+                            <td>@Html.Raw(about.OurStory)</td>
+                            <td>@Html.Raw(about.OurMission)</td>
+                            <td><a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@about.AboutId">Edit</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>There are no entries to display.</p>
+        }
+    </div>
+</div>

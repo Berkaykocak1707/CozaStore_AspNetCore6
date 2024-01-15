@@ -1,0 +1,106 @@
+﻿@model OrderListViewModel
+<!-- breadcrumb -->
+<div class="container">
+	<div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+		<a asp-action="Index" asp-controller="Home" class="stext-109 cl8 hov-cl1 trans-04">
+			Home
+			<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+		</a>
+
+		<span class="stext-109 cl4">
+			Order List @User.Identity.Name
+		</span>
+	</div>
+</div>
+
+<div class="bg0 p-t-75 p-b-85">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
+				<div class="m-l-25 m-r--38 m-lr-0-xl">
+					<div class="wrap-table-shopping-cart">
+						<table class="table-shopping-cart">
+							<tr class="table_head">
+								<th class="column-1"><strong>List by status:</strong></th>
+								<th class="column-2"><a style="text-decoration:none; color:black" asp-action="Index" asp-route-Shipped="Null">All </a></th>
+								<th class="column-3"><a style="text-decoration:none; color:black" asp-action="Index" asp-route-Shipped="False">In-Progress (@TempData["ProgressCounts"]) </a></th>
+								<th class="column-2"><a style="text-decoration:none; color:black" asp-action="Index" asp-route-Shipped="True">Completed (@TempData["ShippedCounts"]) </a></th>
+							</tr>
+							<tr class="table_head">
+								<th class="column-1">Product</th>
+								<th class="column-2"></th>
+								<th class="column-3">Price</th>
+								<th class="column-4 text-center">Action</th>
+							</tr>
+							@if (Model.Orders?.Count() > 0)
+							{
+								@foreach (var item in Model.Orders)
+								{
+									<tr class="table_row">
+										<td class="column-1">
+											<div class="how-itemcart1">
+												@{
+													var random = new Random();
+													var randomLine = item.Lines.ElementAt(random.Next(item.Lines.Count()));
+													var phonePhotoUrl = randomLine.Product.Photo1Url;
+												}
+												<img src="@phonePhotoUrl" alt="IMG">
+											</div>
+										</td>
+										<td class="column-2">
+											<strong style="text-decoration:none; color:black">Order No: #@item.OrderId</strong> 
+											<br>
+											<span>Order Quantity: @item.SubTotalQuantity</span>
+											</td>
+										<td class="column-3">@item.SubTotal.ToString("c2")</td>
+										<td class="column-4 text-center">
+											<a style="text-decoration:none; color:black" asp-action="OrderDetail" asp-route-slug="@item.OrderId" asp-route-returnUrl="@ViewContext.HttpContext.Request.PathAndQuery()">
+												Show Order
+											</a>
+										</td>
+									</tr>
+								}
+							}
+							else
+							{
+								<tr class="table_row">
+									<td>
+										There is no order yet.
+									</td>
+								</tr>
+							}
+						</table>
+						<div class="pagination-wrapper text-center">
+							<div class="pagination" style="justify-content: space-around;">
+								<div page-model="@Model?.Pagination" page-action="Index" page-classes-enabled="true" page-class="btn"
+									 page-class-normal="btn-outline-dark" page-class-selected="btn-light" class="btn-group">
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+		
+	</div>
+</div>
+@section Scripts{
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			var shippedValue = '@TempData["Shipped"]'; // Burada 'yourValue', Shipped parametresinin değeri olmalıdır
+
+			var links = document.querySelectorAll('.pagination-link'); // 'pagination-link' sınıfına sahip tüm <a> etiketlerini seç
+			links.forEach(function (link) {
+				var url = new URL(link.href);
+
+				// Shipped parametresini ekleyin veya mevcutsa güncelleyin
+				url.searchParams.set('Shipped', shippedValue);
+
+				// Güncellenmiş href'i link'e ayarlayın
+				link.href = url.toString();
+			});
+		});
+	</script>
+}

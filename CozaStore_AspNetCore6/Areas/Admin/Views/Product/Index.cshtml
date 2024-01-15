@@ -1,0 +1,143 @@
+﻿@model ProductListViewModel  // Modelinizi ProductDto veya uygun bir DTO ile değiştirin
+@{
+    ViewBag.Title = "Products";
+}
+@section Style
+{
+    <style>
+        .custom-carousel .carousel-images {
+            display: flex;
+            overflow: hidden;
+        }
+
+        .carousel-image {
+            max-width: 100%;
+            display: none;
+        }
+
+            .carousel-image.active {
+                display: block;
+            }
+
+        .carousel-control {
+            padding: 5px 10px;
+            font-size: 16px;
+            color: white; /* Simge rengi */
+            background-color: transparent; /* Arka plan rengi */
+            border: none; /* Kenarlık kaldırma */
+            /* Diğer stil özellikleri */
+        }
+
+
+    </style>
+}
+<div class="bg-secondary rounded h-100 p-4">
+    <h6 class="mb-4">Products</h6>
+    <div class="table-responsive">
+        @if (Model.Products != null)
+        {
+            <div class="mb-3">
+                <a class="btn btn-sm btn-primary" asp-action="Create">Create a Product</a>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Photos</th>
+                        <th scope="col">SKU</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model.Products)
+                    {
+                        <tr>
+                            <td>@product.Name</td>
+                            <td style="width: 100px; height: 100px;">
+                                <div class="custom-carousel" id="carousel-@product.Id">
+                                    <div class="carousel-images">
+                                        <img src="@product.Photo1Url" class="carousel-image active" alt="@product.Name">
+                                        @if (product.Photo2Url is not null)
+                                        {
+                                            <img src="@product.Photo2Url" class="carousel-image" alt="@product.Name">
+                                        }
+                                        @if (product.Photo3Url is not null)
+                                        {
+                                            <img src="@product.Photo3Url" class="carousel-image" alt="@product.Name">
+                                        }
+                                    </div>
+                                    @if (product.Photo2Url != null || product.Photo3Url != null)
+                                    {
+                                        <button class="carousel-control prev" onclick="moveCarousel('carousel-@product.Id', -1)" style="font-size: 16px;">&lt;</button>
+                                        <button class="carousel-control next" onclick="moveCarousel('carousel-@product.Id', 1)" style="font-size: 16px;">&gt;</button>
+
+                                    }
+                                </div>
+                            </td>
+                            <td>@product.SKU</td>
+                            <td>@String.Format("{0:C}", product.Price)</td>
+                            <td>
+                                <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@product.Id">Edit</a>
+                                <a class="btn btn-sm btn-primary" asp-action="Delete" asp-route-id="@product.Id">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="text-center">
+                <div page-model="@Model?.Pagination" page-action="Index" page-classes-enabled="true" page-class="btn"
+                     page-class-normal="btn btn-secondary" page-class-selected="btn btn-primary" class="btn-group">
+                </div>
+            </div>
+        }
+        else
+        {
+            <p>There are no products to display.</p>
+            <a class="btn btn-sm btn-primary" asp-action="Create">Create a Product</a>
+        }
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        function setupCarousel(carouselId) {
+            var carousel = document.getElementById(carouselId);
+            var images = carousel.querySelectorAll('.carousel-image');
+            var totalImages = images.length;
+            var currentIndex = 0;
+
+            carousel.dataset.currentIndex = currentIndex;
+
+            function showImage(index) {
+                images.forEach(image => image.classList.remove('active'));
+                images[index].classList.add('active');
+            }
+
+            showImage(currentIndex);
+        }
+
+        function moveCarousel(carouselId, direction) {
+            var carousel = document.getElementById(carouselId);
+            var images = carousel.querySelectorAll('.carousel-image');
+            var totalImages = images.length;
+            var currentIndex = parseInt(carousel.dataset.currentIndex);
+
+            currentIndex = (currentIndex + direction + totalImages) % totalImages;
+            carousel.dataset.currentIndex = currentIndex;
+
+            images.forEach(image => image.classList.remove('active'));
+            images[currentIndex].classList.add('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var carousels = document.querySelectorAll('.custom-carousel');
+            carousels.forEach(function (carousel) {
+                setupCarousel(carousel.id);
+            });
+        });
+
+
+    </script>
+}
